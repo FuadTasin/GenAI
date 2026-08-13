@@ -25,8 +25,7 @@ length_input=st.selectbox(
     ["Short (1-2 paragraphs)", "Medium (3-5 paragraphs)", "Long (detailed explanation)"]
 )
 
-template=PromptTemplate(
-    input_variables=["paper_input","style_input","length_input"],
+template=PromptTemplate.from_template(
     template=(
         """Please summarize the research paper titled "{paper_input}" with the following specifications:
         Explanation Style: {style_input}
@@ -41,7 +40,7 @@ template=PromptTemplate(
     )
 )
 
-if st.button("sumarize"):
+if st.button("summerize"):
     prompts=template.invoke(
         {
             "paper_input":paper_input,
@@ -49,7 +48,5 @@ if st.button("sumarize"):
             "length_input":length_input
         }
     )
-
     result=model.invoke(prompts)
-
     st.write(result.content)
