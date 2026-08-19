@@ -14,7 +14,7 @@ class ResumeAnalyzer(TypedDict):
     summary:Annotated[str,"Write a brief summary from the candidate's profile"]
     experience_level:Annotated[Literal["entry_level","mid_level","senior_level"],"Classify the candidate's experience level"]
     strength:Annotated[Optional[list[str]],"List candidate's major strength"]
-    weakness:Annotated[Optional[list[str]],"List candidate's weaknesses or areas for improvement"]
+    weakness:Annotated[Optional [list[str]],"List candidate's weaknesses or areas for improvement"]
 
 structured_model=model.with_structured_output(ResumeAnalyzer)
 

@@ -33,3 +33,9 @@ sentence-transformers
 
 # Streamlit
 streamlit
+
+#Validation
+pydantic
+
+#Email validation
+email-validator
