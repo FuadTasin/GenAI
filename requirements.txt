@@ -39,3 +39,6 @@ pydantic
 
 #Email validation
 email-validator
+
+#Structured Output Parser
+langchain-classic
