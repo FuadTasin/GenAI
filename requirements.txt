@@ -42,3 +42,6 @@ email-validator
 
 #Structured Output Parser
 langchain-classic
+
+#Show chain graph
+grandalf
