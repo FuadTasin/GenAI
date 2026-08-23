@@ -10,7 +10,7 @@ load_dotenv()
 model=ChatGroq(model="openai/gpt-oss-120b",temperature=0.3)
 
 class MovieReview(BaseModel):
-    sentiment:str=Field(description="Review will be either Positive or Negative")
+    sentiment:str=Field(description="Review will be either Positive or Negative or Neutral")
 
 pydantic_parser=PydanticOutputParser(
     pydantic_object=MovieReview
@@ -37,7 +37,15 @@ positive_prompt=PromptTemplate(
     input_variables=["review"]
 )
 negative_prompt=PromptTemplate(
-    template="Reply to this negative movie review by apologizing and offering help: \n {review}",
+    template="Reply to this negative movie review by apologizing and offering help: \n Review: {review}",
+    input_variables=["review"]
+)
+neutral_prompt=PromptTemplate(
+    template="Reply politely to this neutral review ask for suggestions to improve: \n Review: {review}",
+    input_variables=["review"]
+)
+default_prompt=PromptTemplate(
+    template=":The sentiment could not be determined: \n Review: {review}",
     input_variables=["review"]
 )
 
@@ -45,14 +53,23 @@ str_parser=StrOutputParser()
 
 positive_chain=positive_prompt|model|str_parser
 negative_chain=negative_prompt|model|str_parser
+neutral_chain=neutral_prompt|model|str_parser
+default_chain=default_prompt|model|str_parser
 
 conditional_chain=RunnableBranch(
     (
         lambda x:"positive"==x["sentiment"].sentiment.strip().lower(),positive_chain
-    ),negative_chain
+    ),
+    (
+        lambda x:"neutral"==x["sentiment"].sentiment.strip().lower(),positive_chain
+    ),
+    (
+        lambda x:"negative"==x["sentiment"].sentiment.strip().lower(),positive_chain
+    ),
+    default_chain
 )
 
-review="The movie was absolutely fantastic. I loved every minute of it."
+review="The movie was average"
 
 sentiment=classifier_chain.invoke({
     "review":review
@@ -63,4 +80,4 @@ result=conditional_chain.invoke({
     "sentiment":sentiment
 })
 
-print(result)
+print(f"Sentiment:{sentiment.sentiment}\nResult:{result}")
