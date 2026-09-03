@@ -14,3 +14,20 @@ docs=loader.load()
 # print(docs[1])
 # print(docs[0].page_content)
 # print(docs[1].metadata)
+
+model=ChatGroq(model='openai/gpt-oss-120b',temperature=0.5)
+parser=StrOutputParser()
+prompt=PromptTemplate(
+    template="""
+    Write a summary of the following text(should be in 5-10 sentences):
+    {text}
+    """,
+    input_variables=["text"]
+)
+
+chain=prompt|model|parser
+
+result=chain.invoke({
+    "text":docs[1]
+})
+print(result)

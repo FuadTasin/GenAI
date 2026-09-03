@@ -53,3 +53,5 @@ ipykernel
 #Langchain Community
 langchain-community
 pypdf
+selenium
+unstructured
