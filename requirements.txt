@@ -49,3 +49,7 @@ grandalf
 #Jupyter Notebook
 jupyter
 ipykernel
+
+#Langchain Community
+langchain-community
+pypdf
